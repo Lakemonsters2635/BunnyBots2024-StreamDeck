@@ -39,16 +39,16 @@ global numberOfKeys
 
 #networktables setup
 
-# ntinst = ntcore.NetworkTableInstance.getDefault()
-# ntinst.startClient4("Eclipse")        # Name of camera in the network table
-# ntinst.setServerTeam(2635) # How to identify the network table server
-# ntinst.startDSClient()
+ntinst = ntcore.NetworkTableInstance.getDefault()
+ntinst.startClient4("Eclipse")        # Name of camera in the network table
+ntinst.setServerTeam(2635) # How to identify the network table server
+ntinst.startDSClient()
 
-# sdv = ntinst.getTable("StreamDeck")
+sdv = ntinst.getTable("StreamDeck")
 
-NetworkTables.initialize(server = "127.0.0.1")
-sd = NetworkTables.getTable("SmartDashboard") #interact w/ smartdashboard
-sdv = NetworkTables.getTable("Streamdeck") #make table for values to be changed from this script
+# NetworkTables.initialize(server = "10.26.35.1")
+# sd = NetworkTables.getTable("SmartDashboard") #interact w/ smartdashboard
+# sdv = NetworkTables.getTable("Streamdeck") #make table for values to be changed from this script
 
 global buttonBools
 
@@ -111,13 +111,17 @@ def key_change_callback(deck, key, state):
     # print("{} {}".format( key, state))
     
     key_style = get_key_style(deck, key, state)
-    if key_style["name"] == "Toggle" and state:
-        buttonBools[key] = not buttonBools[key]
+
+    if key_style["name"] == "Toggle":
+        if not state:
+            return
+        else:    
+            buttonBools[key] = not buttonBools[key]
     elif key_style["name"] == "Momentary":
         buttonBools[key] = state
         
     sdv.putBoolean("boolExample{}".format(key), buttonBools[key]) 
-    
+    print("read {}".format(sdv.getBoolean("boolExample{}".format(key), 25)))
     # Update the key image based on the new key state.
     update_key_image(deck, key, buttonBools[key])
 
