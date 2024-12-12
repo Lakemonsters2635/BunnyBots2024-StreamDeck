@@ -19,7 +19,19 @@ imageNames = [ ( "bunny0", "empty" ),
                ( "bunny2", "empty" ),
                ( "bunny3", "empty" ),
                ( "shrimp0", "empty" ),
-               ( "shrimp1", "empty" )
+               ( "shrimp1", "empty" ),
+               ("1-ON", "1-OFF"),
+               ("2-ON", "2-OFF"),
+               ("3-ON", "3-OFF"),
+               ("4-ON", "4-OFF"),
+               ("5-ON", "5-OFF"),
+               ("6-ON", "6-OFF"),
+               ("7-ON", "7-OFF"),
+               ("8-ON", "8-OFF"),
+               ("9-ON", "9-OFF"),
+               ("10-ON", "10-OFF"),
+               ("11-ON", "11-OFF"),
+               ("12-ON", "12-OFF")
               ]
 
 # Button styles: Style_name, Style_font, Text
@@ -32,7 +44,19 @@ buttonStyles = [ ( "Toggle", FONT, "hello" ),
                  ( "Toggle", FONT, "this" ),
                  ( "Momentary", FONT, "is" ),
                  ( "Momentary", FONT, "a" ),
-                 ( "Momentary", FONT, "test" )
+                 ( "Momentary", FONT, "test" ),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, "")
                 ]
 
 global numberOfKeys
