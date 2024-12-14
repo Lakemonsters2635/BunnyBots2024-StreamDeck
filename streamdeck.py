@@ -1,4 +1,4 @@
-import os
+import os 
 import threading
 from networktables import NetworkTables
 from ntcore import *
@@ -8,30 +8,52 @@ from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 import ntcore
 
+# The following code is added to set the location of the project folder.
+project_folder = os.path.dirname(__file__) 
+os.environ['PATH'] = project_folder + os.pathsep + os.environ['PATH']
+
 #button images path
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 FONT = "arial.ttf"
 
 # Image pairs: True_image, False_image
 
-imageNames = [ ( "bunny0", "empty" ),
-               ( "bunny1", "empty" ),
-               ( "bunny2", "empty" ),
-               ( "bunny3", "empty" ),
-               ( "shrimp0", "empty" ),
-               ( "shrimp1", "empty" ),
-               ("1-ON", "1-OFF"),
-               ("2-ON", "2-OFF"),
-               ("3-ON", "3-OFF"),
-               ("4-ON", "4-OFF"),
-               ("5-ON", "5-OFF"),
-               ("6-ON", "6-OFF"),
-               ("7-ON", "7-OFF"),
-               ("8-ON", "8-OFF"),
-               ("9-ON", "9-OFF"),
-               ("10-ON", "10-OFF"),
-               ("11-ON", "11-OFF"),
-               ("12-ON", "12-OFF")
+imageNames = [  
+                ("3-ON", "3-OFF"),
+                ("10-ON", "10-OFF"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("9-ON", "9-OFF"),
+                ("4-ON", "4-OFF"),
+
+                ("2-ON", "2-OFF"),
+                ("11-ON", "11-OFF"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("8-ON", "8-OFF"),
+                ("5-ON", "5-OFF"),
+
+                ("1-ON", "1-OFF"),
+                ("12-ON", "12-OFF"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("7-ON", "7-OFF"),
+                ("6-ON", "6-OFF"),
+
+                ("red", "red"),
+                ("red", "red"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("blue", "blue"),
+                ("blue", "blue")
               ]
 
 # Button styles: Style_name, Style_font, Text
@@ -39,16 +61,34 @@ imageNames = [ ( "bunny0", "empty" ),
 # Toggle: Button toggles state when pressed.
 # Momentary: Button is true when pressed, false when release
 
-buttonStyles = [ ( "Toggle", FONT, "hello" ),
-                 ( "Toggle", FONT, "world" ),
-                 ( "Toggle", FONT, "this" ),
-                 ( "Momentary", FONT, "is" ),
-                 ( "Momentary", FONT, "a" ),
-                 ( "Momentary", FONT, "test" ),
+buttonStyles = [
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("Toggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
@@ -64,15 +104,11 @@ global numberOfKeys
 #networktables setup
 
 ntinst = ntcore.NetworkTableInstance.getDefault()
-ntinst.startClient4("Eclipse")        # Name of camera in the network table
+ntinst.startClient4("StreamDeck")        # Name of camera in the network table
 ntinst.setServerTeam(2635) # How to identify the network table server
 ntinst.startDSClient()
 
 sdv = ntinst.getTable("StreamDeck")
-
-# NetworkTables.initialize(server = "10.26.35.1")
-# sd = NetworkTables.getTable("SmartDashboard") #interact w/ smartdashboard
-# sdv = NetworkTables.getTable("Streamdeck") #make table for values to be changed from this script
 
 global buttonBools
 
@@ -124,7 +160,6 @@ def update_key_image(deck, key, state):
         # Update requested key with the generated image.
         deck.set_key_image(key, image)
 
-
 # Prints key state change information, updates rhe key image and performs any
 # associated actions when a key is pressed.
 def key_change_callback(deck, key, state):
@@ -143,9 +178,24 @@ def key_change_callback(deck, key, state):
             buttonBools[key] = not buttonBools[key]
     elif key_style["name"] == "Momentary":
         buttonBools[key] = state
-        
-    sdv.putBoolean("boolExample{}".format(key), buttonBools[key]) 
-    print("read {}".format(sdv.getBoolean("boolExample{}".format(key), 25)))
+    elif key_style["name"] == "ToteToggle":
+        for i in range(len(buttonStyles)):
+            if buttonStyles[i][0] == "ToteToggle" and buttonBools[i]:
+                buttonBools[i] = False
+                
+                entry = sdv.getEntry("{}".format(i))
+                entry.setBoolean(False)
+
+                update_key_image(deck, i, False)
+
+
+        buttonBools[key] = True
+            
+    entry = sdv.getEntry("{}".format(key))
+    entry.setBoolean(True)
+    # sdv.putBoolean("{}".format(key), buttonBools[key]) 
+
+    # print("read {}".format(sdv.getBoolean("index{}".format(key), 25)))
     # Update the key image based on the new key state.
     update_key_image(deck, key, buttonBools[key])
 
