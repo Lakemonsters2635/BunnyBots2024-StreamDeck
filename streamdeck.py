@@ -64,19 +64,10 @@ imageNames = [
 buttonStyles = [
                  ("ToteToggle", FONT, ""),
                  ("ToteToggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Momentary", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
-
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
-                 ("Toggle", FONT, ""),
                  ("Momentary", FONT, ""),
                  ("Momentary", FONT, ""),
-                 ("Toggle", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("Momentary", FONT, ""),
                  ("ToteToggle", FONT, ""),
                  ("ToteToggle", FONT, ""),
 
@@ -89,14 +80,23 @@ buttonStyles = [
                  ("ToteToggle", FONT, ""),
                  ("ToteToggle", FONT, ""),
 
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+                 ("ToteToggle", FONT, ""),
+
+                 ("Image", FONT, ""),
+                 ("Image", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
-                 ("Toggle", FONT, "")
+                 ("Toggle", FONT, ""),
+                 ("Image", FONT, ""),
+                 ("Image", FONT, "")
                 ]
 
 global numberOfKeys
@@ -183,18 +183,21 @@ def key_change_callback(deck, key, state):
             if buttonStyles[i][0] == "ToteToggle" and buttonBools[i]:
                 buttonBools[i] = False
                 
-                entry = sdv.getEntry("{}".format(i))
-                entry.setBoolean(False)
-
+                # entry = sdv.getEntry("{}".format(i))
+                # entry.setBoolean(False)
+                sdv.putBoolean("{}".format(i), False) 
                 update_key_image(deck, i, False)
 
 
         buttonBools[key] = True
             
-    entry = sdv.getEntry("{}".format(key))
-    entry.setBoolean(True)
-    # sdv.putBoolean("{}".format(key), buttonBools[key]) 
-
+    # entry = sdv.getEntry("{}".format(key))
+    # entry.setBoolean(True)
+    sdv.putBoolean("{}".format(key), buttonBools[key]) 
+    if key_style["name"] == "ToteToggle":
+        sdv.putString("SelectedProgram", imageNames[key][0])
+        sdv.putNumber("SelectedProgramFloat", float(imageNames[key][0].split("-")[0]))
+        sdv.putString("SelectedProgramString2", imageNames[key][0].split("-")[0])
     # print("read {}".format(sdv.getBoolean("index{}".format(key), 25)))
     # Update the key image based on the new key state.
     update_key_image(deck, key, buttonBools[key])
