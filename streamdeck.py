@@ -7,6 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 import ntcore
+import math
 
 # The following code is added to set the location of the project folder.
 project_folder = os.path.dirname(__file__) 
@@ -19,41 +20,42 @@ FONT = "arial.ttf"
 # Image pairs: True_image, False_image
 
 imageNames = [  
+                ("1-ON", "1-OFF"),
+                ("2-ON", "2-OFF"),
                 ("3-ON", "3-OFF"),
-                ("10-ON", "10-OFF"),
                 ("empty", "empty"),
                 ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("9-ON", "9-OFF"),
+                ("left-ON", "left-OFF"),
+                ("right-ON", "right-OFF"),
                 ("4-ON", "4-OFF"),
 
-                ("2-ON", "2-OFF"),
-                ("11-ON", "11-OFF"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("8-ON", "8-OFF"),
+                ("4-ON", "4-OFF"),
                 ("5-ON", "5-OFF"),
-
-                ("1-ON", "1-OFF"),
-                ("12-ON", "12-OFF"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("7-ON", "7-OFF"),
                 ("6-ON", "6-OFF"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("3-ON", "3-OFF"),
 
-                ("red", "red"),
-                ("red", "red"),
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("empty", "empty"),
-                ("blue", "blue"),
-                ("blue", "blue")
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("2-ON", "2-OFF"),
+
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("1-ON", "1-OFF"),
+
               ]
 
 # Button styles: Style_name, Style_font, Text
@@ -62,32 +64,32 @@ imageNames = [
 # Momentary: Button is true when pressed, false when release
 
 buttonStyles = [
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
+                 ("corralLoc", FONT, ""),
+                 ("corralLoc", FONT, ""),
+                 ("corralLoc", FONT, ""),
                  ("Momentary", FONT, ""),
                  ("Momentary", FONT, ""),
-                 ("Momentary", FONT, ""),
-                 ("Momentary", FONT, ""),
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
+                 ("corralSide", FONT, ""),
+                 ("corralSide", FONT, ""),
+                 ("corralLevel", FONT, ""),
 
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
+                 ("corralLoc", FONT, ""),
+                 ("corralLoc", FONT, ""),
+                 ("corralLoc", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("corralLevel", FONT, ""),
 
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("Momentary", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
-                 ("ToteToggle", FONT, ""),
+                 ("Momentary", FONT, ""),
+                 ("corralLevel", FONT, ""),
 
                  ("Image", FONT, ""),
                  ("Image", FONT, ""),
@@ -96,19 +98,22 @@ buttonStyles = [
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Image", FONT, ""),
-                 ("Image", FONT, "")
+                 ("corralLevel", FONT, "")
                 ]
 
 global numberOfKeys
 
-#networktables setup
+# networktables setup
 
 ntinst = ntcore.NetworkTableInstance.getDefault()
 ntinst.startClient4("StreamDeck")        # Name of camera in the network table
 ntinst.setServerTeam(2635) # How to identify the network table server
+# ntinst.setServer("localhost") # For testing on local machine
 ntinst.startDSClient()
 
 sdv = ntinst.getTable("StreamDeck")
+
+coralInfo = ["0", "0", "0"]
 
 global buttonBools
 
@@ -171,6 +176,7 @@ def key_change_callback(deck, key, state):
     
     key_style = get_key_style(deck, key, state)
 
+    
     if key_style["name"] == "Toggle":
         if not state:
             return
@@ -179,7 +185,7 @@ def key_change_callback(deck, key, state):
     elif key_style["name"] == "Momentary":
         buttonBools[key] = state
     elif key_style["name"] == "ToteToggle":
-        for i in range(len(buttonStyles)):
+        for i in range(numberOfKeys):
             if buttonStyles[i][0] == "ToteToggle" and buttonBools[i]:
                 buttonBools[i] = False
                 
@@ -187,13 +193,39 @@ def key_change_callback(deck, key, state):
                 # entry.setBoolean(False)
                 sdv.putBoolean("{}".format(i), False) 
                 update_key_image(deck, i, False)
+    elif key_style["name"] == "corralLoc":
+        for i in range(numberOfKeys):
+            if buttonStyles[i][0] == "corralLoc" and buttonBools[i]:
+                buttonBools[i] = False
+                
+                coralInfo[0] = str(i+1 if i < 3 else i-4)
+ 
+                update_key_image(deck, i, False)
+    elif key_style["name"] == "corralLevel":
+        for i in range(numberOfKeys):
+            if buttonStyles[i][0] == "corralLevel" and buttonBools[i]:
+                buttonBools[i] = False
+
+                coralInfo[2] = str(5-math.floor(i/7))
+                
+                update_key_image(deck, i, False)
+    elif key_style["name"] == "corralSide":
+        for i in range(numberOfKeys):
+            if buttonStyles[i][0] == "corralSide" and buttonBools[i]:
+                buttonBools[i] = False
+
+                coralInfo[1] = 'L' if i == 5 else 'R'
+                
+                update_key_image(deck, i, False)
 
 
-        buttonBools[key] = True
+    buttonBools[key] = True
+    print(coralInfo[0] + coralInfo[1] + coralInfo[2])
             
     # entry = sdv.getEntry("{}".format(key))
     # entry.setBoolean(True)
     sdv.putBoolean("{}".format(key), buttonBools[key]) 
+    sdv.putStringArray("coralInfo", coralInfo)
     if key_style["name"] == "ToteToggle":
         sdv.putString("SelectedProgram", imageNames[key][0])
         sdv.putNumber("SelectedProgramFloat", float(imageNames[key][0].split("-")[0]))
