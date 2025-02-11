@@ -53,7 +53,7 @@ imageNames = [
                 ("empty", "empty"),
                 ("blue", "red"), # TODO: add an icon for clear
                 ("empty", "empty"),
-                ("empty", "empty"),
+                ("empty", "empty"), # TODO: add an icon for algae
                 ("1-ON", "1-OFF"),
 
               ]
@@ -67,8 +67,8 @@ buttonStyles = [
                  ("corralLoc", FONT, ""),
                  ("corralLoc", FONT, ""),
                  ("corralLoc", FONT, ""),
-                 ("Momentary", FONT, ""),
-                 ("Momentary", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
                  ("corralSide", FONT, ""),
                  ("corralSide", FONT, ""),
                  ("corralLevel", FONT, ""),
@@ -76,28 +76,28 @@ buttonStyles = [
                  ("corralLoc", FONT, ""),
                  ("corralLoc", FONT, ""),
                  ("corralLoc", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Momentary", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
                  ("corralLevel", FONT, ""),
 
-                 ("Momentary", FONT, ""),
-                 ("Momentary", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Momentary", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("algae", FONT, ""),
                  ("corralLevel", FONT, ""),
 
-                 ("Image", FONT, ""),
-                 ("Image", FONT, ""),
-                 ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
                  ("clear", FONT, ""), 
-                 ("Toggle", FONT, ""),
-                 ("Image", FONT, ""),
+                 ("", FONT, ""),
+                 ("algae", FONT, ""),
                  ("corralLevel", FONT, "")
                 ]
 
@@ -114,6 +114,7 @@ ntinst.startDSClient()
 sdv = ntinst.getTable("StreamDeck")
 
 coralInfo = ["0", "0", "0"]
+algae = "0"
 
 global buttonBools
 
@@ -164,11 +165,16 @@ def update_key_image(deck, key, state):
     with deck:
         # Update requested key with the generated image.
         deck.set_key_image(key, image)
+def clear_deck(deck, ):
+    for i in range(numberOfKeys):
+            if buttonBools[i]:
+                buttonBools[i] = False
+                update_key_image(deck, i, False)
 
 # Prints key state change information, updates rhe key image and performs any
 # associated actions when a key is pressed.
 def key_change_callback(deck, key, state):
-    global coralInfo
+    global coralInfo, algae
     if key >= numberOfKeys:
         return
         
@@ -214,19 +220,24 @@ def key_change_callback(deck, key, state):
                 
                 update_key_image(deck, i, False)
     elif key_style["name"] == "clear":
+        clear_deck(deck)
+        coralInfo = ["0", "0", "0"]
+    elif key_style["name"] == "algae":
         for i in range(numberOfKeys):
-            if buttonBools[i]:
+            if buttonStyles[i][0] == "algae" and buttonBools[i]:
                 buttonBools[i] = False
-                update_key_image(deck, i, False)
 
-                coralInfo = ["0", "0", "0"]
+                update_key_image(deck, i, False)
+        algae = "Low" if key == 30 else "High"
 
 
     buttonBools[key] = True
-    print(coralInfo[0] + coralInfo[1] + coralInfo[2])
+    # print(coralInfo[0] + coralInfo[1] + coralInfo[2])
+    print(algae)
             
             
     sdv.putBoolean("{}".format(key), buttonBools[key]) 
+    sdv.putString("algae", algae)
     sdv.putStringArray("coralInfo", coralInfo)
     if key_style["name"] == "ToteToggle":
         sdv.putString("SelectedProgram", imageNames[key][0])
