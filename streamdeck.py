@@ -51,7 +51,7 @@ imageNames = [
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("empty", "empty"),
-                ("empty", "empty"),
+                ("blue", "red"), # TODO: add an icon for clear
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("1-ON", "1-OFF"),
@@ -95,7 +95,7 @@ buttonStyles = [
                  ("Image", FONT, ""),
                  ("Toggle", FONT, ""),
                  ("Toggle", FONT, ""),
-                 ("Toggle", FONT, ""),
+                 ("clear", FONT, ""), 
                  ("Toggle", FONT, ""),
                  ("Image", FONT, ""),
                  ("corralLevel", FONT, "")
@@ -168,12 +168,10 @@ def update_key_image(deck, key, state):
 # Prints key state change information, updates rhe key image and performs any
 # associated actions when a key is pressed.
 def key_change_callback(deck, key, state):
-
+    global coralInfo
     if key >= numberOfKeys:
         return
-    
-    # print("{} {}".format( key, state))
-    
+        
     key_style = get_key_style(deck, key, state)
 
     
@@ -189,8 +187,6 @@ def key_change_callback(deck, key, state):
             if buttonStyles[i][0] == "ToteToggle" and buttonBools[i]:
                 buttonBools[i] = False
                 
-                # entry = sdv.getEntry("{}".format(i))
-                # entry.setBoolean(False)
                 sdv.putBoolean("{}".format(i), False) 
                 update_key_image(deck, i, False)
     elif key_style["name"] == "corralLoc":
@@ -217,13 +213,19 @@ def key_change_callback(deck, key, state):
                 coralInfo[1] = 'L' if i == 5 else 'R'
                 
                 update_key_image(deck, i, False)
+    elif key_style["name"] == "clear":
+        for i in range(numberOfKeys):
+            if buttonBools[i]:
+                buttonBools[i] = False
+                update_key_image(deck, i, False)
+
+                coralInfo = ["0", "0", "0"]
 
 
     buttonBools[key] = True
     print(coralInfo[0] + coralInfo[1] + coralInfo[2])
             
-    # entry = sdv.getEntry("{}".format(key))
-    # entry.setBoolean(True)
+            
     sdv.putBoolean("{}".format(key), buttonBools[key]) 
     sdv.putStringArray("coralInfo", coralInfo)
     if key_style["name"] == "ToteToggle":
