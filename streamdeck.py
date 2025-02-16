@@ -47,7 +47,7 @@ imageNames = [
                 ("empty", "empty"),
                 ("2-ON", "2-OFF"),
 
-                ("empty", "empty"),
+                ("5-ON", "5-OFF"),
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("empty", "empty"),
@@ -91,7 +91,7 @@ buttonStyles = [
                  ("algae", FONT, ""),
                  ("corralLevel", FONT, ""),
 
-                 ("", FONT, ""),
+                 ("corralLevel", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
@@ -207,8 +207,10 @@ def key_change_callback(deck, key, state):
         for i in range(numberOfKeys):
             if buttonStyles[i][0] == "corralLevel" and buttonBools[i]:
                 buttonBools[i] = False
-
-                coralInfo[2] = str(5-math.floor(i/7))
+                if i != 21:
+                    coralInfo[2] = str(5-math.floor(i/7))
+                else:
+                    coralInfo[2] = "0"
                 
                 update_key_image(deck, i, False)
     elif key_style["name"] == "corralSide":
