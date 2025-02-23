@@ -24,8 +24,8 @@ imageNames = [
                 ("2-ON", "2-OFF"),
                 ("3-ON", "3-OFF"),
                 ("empty", "empty"),
-                ("empty", "empty"),
                 ("left-ON", "left-OFF"),
+                ("Algae\\ON\\AH", "Algae\\OFF\\AH"),
                 ("right-ON", "right-OFF"),
                 ("4-ON", "4-OFF"),
 
@@ -34,7 +34,7 @@ imageNames = [
                 ("6-ON", "6-OFF"),
                 ("empty", "empty"),
                 ("empty", "empty"),
-                ("empty", "empty"),
+                ("Algae\\ON\\AL", "Algae\\OFF\\AL"),
                 ("empty", "empty"),
                 ("3-ON", "3-OFF"),
 
@@ -43,17 +43,17 @@ imageNames = [
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("empty", "empty"),
-                ("empty", "empty"),
+                ("Algae\\ON\\AC", "Algae\\OFF\\AC"),
                 ("empty", "empty"),
                 ("2-ON", "2-OFF"),
 
-                ("5-ON", "5-OFF"),
+                ("Source\\ON\\SL", "Source\\OFF\\SL"),
+                ("Source\\ON\\SR", "Source\\OFF\\SR"),
                 ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("blue", "red"), # TODO: add an icon for clear
-                ("empty", "empty"),
-                ("empty", "empty"), # TODO: add an icon for algae
+                ("Climb\\ON\\CL", "Climb\\OFF\\CL"),
+                ("blue", "red"),
+                ("Algae\\ON\\AG", "Algae\\OFF\\AG"),
+                ("Algae\\ON\\AP", "Algae\\OFF\\AP"),
                 ("1-ON", "1-OFF"),
 
               ]
@@ -68,8 +68,8 @@ buttonStyles = [
                  ("corralLoc", FONT, ""),
                  ("corralLoc", FONT, ""),
                  ("", FONT, ""),
-                 ("", FONT, ""),
                  ("corralSide", FONT, ""),
+                 ("algae", FONT, ""),
                  ("corralSide", FONT, ""),
                  ("corralLevel", FONT, ""),
 
@@ -78,25 +78,25 @@ buttonStyles = [
                  ("corralLoc", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
-                 ("", FONT, ""),
+                 ("algae", FONT, ""),
                  ("", FONT, ""),
                  ("corralLevel", FONT, ""),
 
-                 ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("algae", FONT, ""),
+                 ("", FONT, ""),
                  ("corralLevel", FONT, ""),
 
                  ("corralLevel", FONT, ""),
+                 ("corralLevel", FONT, ""),
                  ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
+                 ("climb", FONT, ""),
                  ("clear", FONT, ""), 
-                 ("", FONT, ""),
+                 ("algae", FONT, ""),
                  ("algae", FONT, ""),
                  ("corralLevel", FONT, "")
                 ]
@@ -231,6 +231,11 @@ def key_change_callback(deck, key, state):
 
                 update_key_image(deck, i, False)
         algae = "Low" if key == 30 else "High"
+        if(key == 5): algae = "AH"
+        if(key == 13): algae = "AL"
+        if(key == 21): algae = "AC"
+        if(key == 29): algae = "AG"
+        if(key == 30): algae = "AP"
 
 
     buttonBools[key] = True
@@ -238,7 +243,7 @@ def key_change_callback(deck, key, state):
     print(algae)
             
             
-    sdv.putBoolean("{}".format(key), buttonBools[key]) 
+    # sdv.putBoolean("{}".format(key), buttonBools[key]) 
     sdv.putString("algae", algae)
     sdv.putStringArray("coralInfo", coralInfo)
     if key_style["name"] == "ToteToggle":
