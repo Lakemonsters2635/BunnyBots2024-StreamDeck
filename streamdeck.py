@@ -1,7 +1,10 @@
 import os 
 import threading
-from networktables import NetworkTables
+# from networktables import NetworkTables
 from ntcore import *
+from networktables import NetworkTables
+from networktables import NetworkTablesInstance
+
 from networktables.util import ntproperty
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
@@ -105,8 +108,8 @@ global numberOfKeys
 
 # networktables setup
 
-ntinst = ntcore.NetworkTableInstance.getDefault()
-ntinst.startClient4("StreamDeck")        # Name of camera in the network table
+ntinst = NetworkTablesInstance.getDefault()
+ntinst.startClient("StreamDeck")        # Name of camera in the network table
 ntinst.setServerTeam(2635) # How to identify the network table server
 # ntinst.setServer("localhost") # For testing on local machine
 ntinst.startDSClient()
