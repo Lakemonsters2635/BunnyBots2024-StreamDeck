@@ -224,6 +224,7 @@ def key_change_callback(deck, key, state):
     elif key_style["name"] == "clear":
         clear_deck(deck)
         elevState = "CL"
+        auto = "C"
 
 
     buttonBools[key] = True
