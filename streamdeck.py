@@ -27,37 +27,37 @@ imageNames = [
                 ("2-ON", "2-OFF"),
                 ("3-ON", "3-OFF"),
                 ("empty", "empty"),
-                ("left-ON", "left-OFF"),
-                ("Algae\\ON\\AH", "Algae\\OFF\\AH"),
-                ("right-ON", "right-OFF"),
-                ("4-ON", "4-OFF"),
+                ("empty", "empty"),
+                ("Algae\\ON\\AC", "Algae\\OFF\\AC"), # Algae barge
+                ("empty", "empty"),
+                ("empty", "empty"),
 
-                ("4-ON", "4-OFF"),
-                ("5-ON", "5-OFF"),
-                ("6-ON", "6-OFF"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("Algae\\ON\\AH", "Algae\\OFF\\AH"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
                 ("empty", "empty"),
                 ("empty", "empty"),
                 ("Algae\\ON\\AL", "Algae\\OFF\\AL"),
                 ("empty", "empty"),
-                ("3-ON", "3-OFF"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AC", "Algae\\OFF\\AC"),
-                ("empty", "empty"),
-                ("2-ON", "2-OFF"),
-
-                ("Source\\ON\\SL", "Source\\OFF\\SL"),
-                ("Source\\ON\\SR", "Source\\OFF\\SR"),
-                ("empty", "empty"),
                 ("Climb\\ON\\CL", "Climb\\OFF\\CL"),
+
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
+                ("empty", "empty"),
                 ("blue", "red"),
                 ("Algae\\ON\\AG", "Algae\\OFF\\AG"),
                 ("Algae\\ON\\AP", "Algae\\OFF\\AP"),
-                ("1-ON", "1-OFF"),
+                ("Algae\\ON\\AC", "Algae\\OFF\\AC"), # Algae carry
 
               ]
 
@@ -67,41 +67,41 @@ imageNames = [
 # Momentary: Button is true when pressed, false when release
 
 buttonStyles = [
-                 ("corralLoc", FONT, ""),
-                 ("corralLoc", FONT, ""),
-                 ("corralLoc", FONT, ""),
-                 ("", FONT, ""),
-                 ("corralSide", FONT, ""),
-                 ("algae", FONT, ""),
-                 ("corralSide", FONT, ""),
-                 ("corralLevel", FONT, ""),
-
-                 ("corralLoc", FONT, ""),
-                 ("corralLoc", FONT, ""),
-                 ("corralLoc", FONT, ""),
+                 ("auto", FONT, ""),
+                 ("auto", FONT, ""),
+                 ("auto", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
-                 ("algae", FONT, ""),
+                 ("elevState", FONT, ""),
                  ("", FONT, ""),
-                 ("corralLevel", FONT, ""),
+                 ("", FONT, ""),
 
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
-                 ("algae", FONT, ""),
+                 ("elevState", FONT, ""),
                  ("", FONT, ""),
-                 ("corralLevel", FONT, ""),
+                 ("", FONT, ""), # Drive
 
-                 ("corralLevel", FONT, ""),
-                 ("corralLevel", FONT, ""),
                  ("", FONT, ""),
-                 ("climb", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("elevState", FONT, ""),
+                 ("", FONT, ""),
+                 ("elevState", FONT, ""),
+
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""),
+                 ("", FONT, ""), # Climb
                  ("clear", FONT, ""), 
-                 ("algae", FONT, ""),
-                 ("algae", FONT, ""),
-                 ("corralLevel", FONT, "")
+                 ("elevState", FONT, ""),
+                 ("elevState", FONT, ""),
+                 ("elevState", FONT, "")
                 ]
 
 global numberOfKeys
@@ -116,8 +116,8 @@ ntinst.startDSClient()
 
 sdv = ntinst.getTable("StreamDeck")
 
-coralInfo = ["0", "0", "0"]
-algae = "0"
+elevState = "CL"
+auto  = "C"
 
 global buttonBools
 
@@ -177,7 +177,7 @@ def clear_deck(deck, ):
 # Prints key state change information, updates rhe key image and performs any
 # associated actions when a key is pressed.
 def key_change_callback(deck, key, state):
-    global coralInfo, algae
+    global elevState, auto
     if key >= numberOfKeys:
         return
         
@@ -198,57 +198,44 @@ def key_change_callback(deck, key, state):
                 
                 sdv.putBoolean("{}".format(i), False) 
                 update_key_image(deck, i, False)
-    elif key_style["name"] == "corralLoc":
+    elif key_style["name"] == "elevState":
         for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "corralLoc" and buttonBools[i]:
+            if buttonStyles[i][0] == "elevState" and buttonBools[i]:
                 buttonBools[i] = False
-                
-                coralInfo[0] = str(i+1 if i < 3 else i-4)
+                if(key == 5) : elevState = "AB"
+                if(key == 13): elevState = "AH"
+                if(key == 21): elevState = "AL"
+                if(key == 23): elevState = "CL"
+                if(key == 29): elevState = "AG"
+                if(key == 30): elevState = "AP"
+                if(key == 31): elevState = "AC"
  
                 update_key_image(deck, i, False)
-    elif key_style["name"] == "corralLevel":
+    elif key_style["name"] == "auto":
         for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "corralLevel" and buttonBools[i]:
+            if buttonStyles[i][0] == "auto" and buttonBools[i]:
                 buttonBools[i] = False
-                if i != 21:
-                    coralInfo[2] = str(5-math.floor(i/7))
-                else:
-                    coralInfo[2] = "0"
                 
+                if key == 0: auto = "C"
+                if key == 1: auto = "CS"
+                if key == 2: auto = "SS"
                 update_key_image(deck, i, False)
-    elif key_style["name"] == "corralSide":
-        for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "corralSide" and buttonBools[i]:
-                buttonBools[i] = False
-
-                coralInfo[1] = 'L' if i == 5 else 'R'
-                
-                update_key_image(deck, i, False)
+        
     elif key_style["name"] == "clear":
         clear_deck(deck)
-        coralInfo = ["0", "0", "0"]
-    elif key_style["name"] == "algae":
-        for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "algae" and buttonBools[i]:
-                buttonBools[i] = False
-
-                update_key_image(deck, i, False)
-        algae = "Low" if key == 30 else "High"
-        if(key == 5): algae = "AH"
-        if(key == 13): algae = "AL"
-        if(key == 21): algae = "AC"
-        if(key == 29): algae = "AG"
-        if(key == 30): algae = "AP"
+        elevState = "CL"
 
 
     buttonBools[key] = True
     # print(coralInfo[0] + coralInfo[1] + coralInfo[2])
-    print(algae)
+    print("ElevState:" + elevState)
+    print("auto:" + auto)
             
             
     # sdv.putBoolean("{}".format(key), buttonBools[key]) 
-    sdv.putString("algae", algae)
-    sdv.putStringArray("coralInfo", coralInfo)
+    sdv.putString("elevState", elevState)
+    sdv.putString("auto", auto)
+    # sdv.putStringArray("coralInfo", coralInfo)
     if key_style["name"] == "ToteToggle":
         sdv.putString("SelectedProgram", imageNames[key][0])
         sdv.putNumber("SelectedProgramFloat", float(imageNames[key][0].split("-")[0]))
