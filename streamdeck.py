@@ -23,12 +23,12 @@ FONT = "arial.ttf"
 # Image pairs: True_image, False_image
 
 imageNames = [  
-                ("1-ON", "1-OFF"),
-                ("2-ON", "2-OFF"),
-                ("3-ON", "3-OFF"),
+                ("AUTO\\ON\\C", "AUTO\\OFF\\C"),
+                ("AUTO\\ON\\CS", "AUTO\\OFF\\CS"),
+                ("AUTO\\ON\\SS", "AUTO\\OFF\\SS"),
                 ("empty", "empty"),
                 ("empty", "empty"),
-                ("Algae\\ON\\AC", "Algae\\OFF\\AC"), # Algae barge
+                ("Algae\\ON\\AB", "Algae\\OFF\\AB"),
                 ("empty", "empty"),
                 ("empty", "empty"),
 
@@ -57,7 +57,7 @@ imageNames = [
                 ("blue", "red"),
                 ("Algae\\ON\\AG", "Algae\\OFF\\AG"),
                 ("Algae\\ON\\AP", "Algae\\OFF\\AP"),
-                ("Algae\\ON\\AC", "Algae\\OFF\\AC"), # Algae carry
+                ("Algae\\ON\\AC", "Algae\\OFF\\AC"),
 
               ]
 
@@ -83,7 +83,7 @@ buttonStyles = [
                  ("", FONT, ""),
                  ("elevState", FONT, ""),
                  ("", FONT, ""),
-                 ("", FONT, ""), # Drive
+                 ("", FONT, ""),
 
                  ("", FONT, ""),
                  ("", FONT, ""),
@@ -97,7 +97,7 @@ buttonStyles = [
                  ("", FONT, ""),
                  ("", FONT, ""),
                  ("", FONT, ""),
-                 ("", FONT, ""), # Climb
+                 ("", FONT, ""),
                  ("clear", FONT, ""), 
                  ("elevState", FONT, ""),
                  ("elevState", FONT, ""),
