@@ -1,4 +1,5 @@
 import os 
+import json
 import threading
 # from networktables import NetworkTables
 from ntcore import *
@@ -20,89 +21,19 @@ os.environ['PATH'] = project_folder + os.pathsep + os.environ['PATH']
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 FONT = "arial.ttf"
 
+# Load imageNames and buttonStyles from JSON
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+with open(CONFIG_PATH, 'r') as config_file:
+    config = json.load(config_file)
+
 # Image pairs: True_image, False_image
-
-imageNames = [  
-                ("AUTO\\ON\\C", "AUTO\\OFF\\C"),
-                ("AUTO\\ON\\CS", "AUTO\\OFF\\CS"),
-                ("AUTO\\ON\\SS", "AUTO\\OFF\\SS"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AB", "Algae\\OFF\\AB"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AH", "Algae\\OFF\\AH"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AL", "Algae\\OFF\\AL"),
-                ("empty", "empty"),
-                ("Climb\\ON\\CL", "Climb\\OFF\\CL"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("blue", "red"),
-                ("Algae\\ON\\AG", "Algae\\OFF\\AG"),
-                ("Algae\\ON\\AP", "Algae\\OFF\\AP"),
-                ("Algae\\ON\\AC", "Algae\\OFF\\AC"),
-
-              ]
+imageNames = [tuple(button['images']) for button in config['buttons']]
 
 # Button styles: Style_name, Style_font, Text
 #
 # Toggle: Button toggles state when pressed.
 # Momentary: Button is true when pressed, false when release
-
-buttonStyles = [
-                 ("auto", FONT, ""),
-                 ("auto", FONT, ""),
-                 ("auto", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("clear", FONT, ""), 
-                 ("elevState", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("elevState", FONT, "")
-                ]
+buttonStyles = [(button['style'], FONT, button['label']) for button in config['buttons']]
 
 global numberOfKeys
 
