@@ -1,16 +1,11 @@
 import os 
+import json
 import threading
-# from networktables import NetworkTables
-from ntcore import *
-from networktables import NetworkTables
 from networktables import NetworkTablesInstance
 
-from networktables.util import ntproperty
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
-import ntcore
-import math
 
 # The following code is added to set the location of the project folder.
 project_folder = os.path.dirname(__file__) 
@@ -20,89 +15,19 @@ os.environ['PATH'] = project_folder + os.pathsep + os.environ['PATH']
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 FONT = "arial.ttf"
 
+# Load imageNames and buttonStyles from JSON
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+with open(CONFIG_PATH, 'r') as config_file:
+    config = json.load(config_file)
+
 # Image pairs: True_image, False_image
-
-imageNames = [  
-                ("AUTO\\ON\\C", "AUTO\\OFF\\C"),
-                ("AUTO\\ON\\CS", "AUTO\\OFF\\CS"),
-                ("AUTO\\ON\\SS", "AUTO\\OFF\\SS"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AB", "Algae\\OFF\\AB"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AH", "Algae\\OFF\\AH"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("Algae\\ON\\AL", "Algae\\OFF\\AL"),
-                ("empty", "empty"),
-                ("Climb\\ON\\CL", "Climb\\OFF\\CL"),
-
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("empty", "empty"),
-                ("blue", "red"),
-                ("Algae\\ON\\AG", "Algae\\OFF\\AG"),
-                ("Algae\\ON\\AP", "Algae\\OFF\\AP"),
-                ("Algae\\ON\\AC", "Algae\\OFF\\AC"),
-
-              ]
+imageNames = [tuple(button['images']) for button in config['buttons']]
 
 # Button styles: Style_name, Style_font, Text
-#
-# Toggle: Button toggles state when pressed.
-# Momentary: Button is true when pressed, false when release
+buttonStyles = [(button['style'], FONT, button['label']) for button in config['buttons']]
+buttonVals = [button['val'] for button in config['buttons']]
 
-buttonStyles = [
-                 ("auto", FONT, ""),
-                 ("auto", FONT, ""),
-                 ("auto", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("", FONT, ""),
-                 ("elevState", FONT, ""),
-
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("", FONT, ""),
-                 ("clear", FONT, ""), 
-                 ("elevState", FONT, ""),
-                 ("elevState", FONT, ""),
-                 ("elevState", FONT, "")
-                ]
+styles = {key: "" for key in (button['style'] for button in config['buttons'])}
 
 global numberOfKeys
 
@@ -110,14 +35,11 @@ global numberOfKeys
 
 ntinst = NetworkTablesInstance.getDefault()
 ntinst.startClient("StreamDeck")        # Name of camera in the network table
-ntinst.setServerTeam(2635) # How to identify the network table server
-# ntinst.setServer("localhost") # For testing on local machine
+# ntinst.setServerTeam(2635) # How to identify the network table server
+ntinst.setServer("localhost") # For testing on local machine, works in competition too
 ntinst.startDSClient()
 
 sdv = ntinst.getTable("StreamDeck")
-
-elevState = "CL"
-auto  = "C"
 
 global buttonBools
 
@@ -168,6 +90,7 @@ def update_key_image(deck, key, state):
     with deck:
         # Update requested key with the generated image.
         deck.set_key_image(key, image)
+
 def clear_deck(deck, ):
     for i in range(numberOfKeys):
             if buttonBools[i]:
@@ -177,71 +100,29 @@ def clear_deck(deck, ):
 # Prints key state change information, updates rhe key image and performs any
 # associated actions when a key is pressed.
 def key_change_callback(deck, key, state):
-    global elevState, auto
     if key >= numberOfKeys:
         return
         
     key_style = get_key_style(deck, key, state)
-
     
-    if key_style["name"] == "Toggle":
-        if not state:
-            return
-        else:    
-            buttonBools[key] = not buttonBools[key]
-    elif key_style["name"] == "Momentary":
-        buttonBools[key] = state
-    elif key_style["name"] == "ToteToggle":
-        for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "ToteToggle" and buttonBools[i]:
-                buttonBools[i] = False
-                
-                sdv.putBoolean("{}".format(i), False) 
-                update_key_image(deck, i, False)
-    elif key_style["name"] == "elevState":
-        for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "elevState" and buttonBools[i]:
-                buttonBools[i] = False
-                if(key == 5) : elevState = "AB"
-                if(key == 13): elevState = "AH"
-                if(key == 21): elevState = "AL"
-                if(key == 23): elevState = "CL"
-                if(key == 29): elevState = "AG"
-                if(key == 30): elevState = "AP"
-                if(key == 31): elevState = "AC"
- 
-                update_key_image(deck, i, False)
-    elif key_style["name"] == "auto":
-        for i in range(numberOfKeys):
-            if buttonStyles[i][0] == "auto" and buttonBools[i]:
-                buttonBools[i] = False
-                
-                if key == 0: auto = "C"
-                if key == 1: auto = "CS"
-                if key == 2: auto = "SS"
-                update_key_image(deck, i, False)
-        
-    elif key_style["name"] == "clear":
+    styles[buttonStyles[key][0]] = buttonVals[key]
+    
+    for i in range(numberOfKeys):
+        if buttonStyles[i][0] == buttonStyles[key][0] and buttonBools[i]:
+            buttonBools[i] = False
+            update_key_image(deck, i, False)
+            
+    if styles["clear"] == "clear":
         clear_deck(deck)
-        elevState = "CL"
-        auto = "C"
-
+        styles["elevState"] = "CL"
+        styles["auto"] = "C"
+        styles["clear"] = ""
 
     buttonBools[key] = True
-    # print(coralInfo[0] + coralInfo[1] + coralInfo[2])
-    print("ElevState:" + elevState)
-    print("auto:" + auto)
             
-            
-    # sdv.putBoolean("{}".format(key), buttonBools[key]) 
-    sdv.putString("elevState", elevState)
-    sdv.putString("auto", auto)
-    # sdv.putStringArray("coralInfo", coralInfo)
-    if key_style["name"] == "ToteToggle":
-        sdv.putString("SelectedProgram", imageNames[key][0])
-        sdv.putNumber("SelectedProgramFloat", float(imageNames[key][0].split("-")[0]))
-        sdv.putString("SelectedProgramString2", imageNames[key][0].split("-")[0])
-    # print("read {}".format(sdv.getBoolean("index{}".format(key), 25)))
+    sdv.putString("elevState", styles.get("elevState", styles["elevState"]))
+    sdv.putString("auto", styles.get("auto", styles["auto"]))
+    
     # Update the key image based on the new key state.
     update_key_image(deck, key, buttonBools[key])
 
