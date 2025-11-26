@@ -4,193 +4,225 @@
       "index": 0,
       "images": ["AUTO\\ON\\C", "AUTO\\OFF\\C"],
       "style": "auto",
-      "label": ""
+      "label": "",
+      "val": "C"
     },
     {
       "index": 1,
       "images": ["AUTO\\ON\\CS", "AUTO\\OFF\\CS"],
       "style": "auto",
-      "label": ""
+      "label": "",
+      "val": "CS"
     },
     {
       "index": 2,
       "images": ["AUTO\\ON\\SS", "AUTO\\OFF\\SS"],
       "style": "auto",
-      "label": ""
+      "label": "",
+      "val": "SS"
     },
     {
       "index": 3,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 4,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 5,
       "images": ["Algae\\ON\\AB", "Algae\\OFF\\AB"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 6,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 7,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 8,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 9,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 10,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 11,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 12,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 13,
       "images": ["Algae\\ON\\AH", "Algae\\OFF\\AH"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": "AH"
     },
     {
       "index": 14,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 15,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 16,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 17,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 18,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 19,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 20,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 21,
       "images": ["Algae\\ON\\AL", "Algae\\OFF\\AL"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": "AL"
     },
     {
       "index": 22,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 23,
       "images": ["Climb\\ON\\CL", "Climb\\OFF\\CL"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": "CL"
     },
     {
       "index": 24,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 25,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 26,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 27,
       "images": ["empty", "empty"],
       "style": "",
-      "label": ""
+      "label": "",
+      "val": ""
     },
     {
       "index": 28,
       "images": ["blue", "red"],
       "style": "clear",
-      "label": ""
+      "label": "",
+      "val": "clear"
     },
     {
       "index": 29,
       "images": ["Algae\\ON\\AG", "Algae\\OFF\\AG"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": "AG"
     },
     {
       "index": 30,
       "images": ["Algae\\ON\\AP", "Algae\\OFF\\AP"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": "AP"
     },
     {
       "index": 31,
       "images": ["Algae\\ON\\AC", "Algae\\OFF\\AC"],
       "style": "elevState",
-      "label": ""
+      "label": "",
+      "val": "AC"
     }
   ]
 }
