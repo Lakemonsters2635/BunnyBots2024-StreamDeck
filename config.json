@@ -2,24 +2,24 @@
   "buttons": [
     {
       "index": 0,
-      "images": ["AUTO\\ON\\C", "AUTO\\OFF\\C"],
-      "style": "auto",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "C"
+      "val": ""
     },
     {
       "index": 1,
-      "images": ["AUTO\\ON\\CS", "AUTO\\OFF\\CS"],
-      "style": "auto",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "CS"
+      "val": ""
     },
     {
       "index": 2,
-      "images": ["AUTO\\ON\\SS", "AUTO\\OFF\\SS"],
-      "style": "auto",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "SS"
+      "val": ""
     },
     {
       "index": 3,
@@ -37,8 +37,8 @@
     },
     {
       "index": 5,
-      "images": ["Algae\\ON\\AB", "Algae\\OFF\\AB"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
       "val": ""
     },
@@ -93,10 +93,10 @@
     },
     {
       "index": 13,
-      "images": ["Algae\\ON\\AH", "Algae\\OFF\\AH"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "AH"
+      "val": ""
     },
     {
       "index": 14,
@@ -149,10 +149,10 @@
     },
     {
       "index": 21,
-      "images": ["Algae\\ON\\AL", "Algae\\OFF\\AL"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "AL"
+      "val": ""
     },
     {
       "index": 22,
@@ -163,10 +163,10 @@
     },
     {
       "index": 23,
-      "images": ["Climb\\ON\\CL", "Climb\\OFF\\CL"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "CL"
+      "val": ""
     },
     {
       "index": 24,
@@ -205,24 +205,24 @@
     },
     {
       "index": 29,
-      "images": ["Algae\\ON\\AG", "Algae\\OFF\\AG"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "AG"
+      "val": ""
     },
     {
       "index": 30,
-      "images": ["Algae\\ON\\AP", "Algae\\OFF\\AP"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "AP"
+      "val": ""
     },
     {
       "index": 31,
-      "images": ["Algae\\ON\\AC", "Algae\\OFF\\AC"],
-      "style": "elevState",
+      "images": ["empty", "empty"],
+      "style": "",
       "label": "",
-      "val": "AC"
+      "val": ""
     }
   ]
 }
