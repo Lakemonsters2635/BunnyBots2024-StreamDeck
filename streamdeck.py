@@ -114,14 +114,13 @@ def key_change_callback(deck, key, state):
             
     if styles["clear"] == "clear":
         clear_deck(deck)
-        styles["elevState"] = "CL"
-        styles["auto"] = "C"
-        styles["clear"] = ""
+        for style in styles.keys():
+            styles[style] = ""
 
     buttonBools[key] = True
             
-    sdv.putString("elevState", styles.get("elevState", styles["elevState"]))
-    sdv.putString("auto", styles.get("auto", styles["auto"]))
+    for style in styles.keys():
+        sdv.putString(style, styles[style])
     
     # Update the key image based on the new key state.
     update_key_image(deck, key, buttonBools[key])
