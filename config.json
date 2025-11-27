@@ -198,7 +198,7 @@
     },
     {
       "index": 28,
-      "images": ["blue", "red"],
+      "images": ["SolidColors/blue", "SolidColors/red"],
       "style": "clear",
       "label": "",
       "val": "clear"
